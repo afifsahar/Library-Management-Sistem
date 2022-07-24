@@ -16,6 +16,7 @@ TRUNCATE borrowBook;
 CREATE TABLE IF NOT EXISTS user(
     user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(255) NOT NULL,
+	tanggal_lahir DATE,
     user_profession VARCHAR(255),
     user_address VARCHAR(255) NOT NULL,
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -87,11 +88,11 @@ DELIMITER ;
 
 INSERT INTO user(user_name, user_profession, user_address)
 VALUES
-('Afif','Direktur','Ragunan'),
-('Edwin','Presiden','Pasar Minggu'),
-('Ricky','Kadiv','Jagakarsa'),
-('Fadil','Komisaris','Pasar Rebo'),
-('Satria','Mahasiswa','Tangsel');
+('Afif','1994-01-01','Direktur','Ragunan'),
+('Edwin','1995-01-01','Presiden','Pasar Minggu'),
+('Ricky','1996-01-01','Kadiv','Jagakarsa'),
+('Fadil','1997-01-01','Komisaris','Pasar Rebo'),
+('Satria','1998-01-01','Mahasiswa','Tangsel');
 
 INSERT INTO book(book_code, book_name, book_stock)
 VALUES
@@ -100,35 +101,4 @@ VALUES
 (7586,'Atomic Habit',30),
 (8260,'The Psychology of Money',70),
 (4577,'Advanced Data Science',50);
-
-INSERT INTO borrowBook(bookId_fk, userId_fk)
-VALUES (1,1),(1,2),(1,3);
-
-
-UPDATE borrowBook SET is_return = TRUE WHERE borrowBook_id = 1;
-UPDATE borrowBook SET returned_on = '2022-07-22' WHERE borrowBook_id = 2;
-UPDATE borrowBook 
-SET
-is_return = True,
-returned_on = '2022-07-26'
-WHERE borrowBook_id = 3;
-
-ALTER TABLE user ADD tanggal_lahir DATE;
-
-
-select bb.borrowBook_id, b.book_code, b.book_name, u.user_name, 
-	bb.borrow_date, bb.returned_on, bb.lateness
-from borrowbook bb
-	join book b
-		on bb.bookId_fk = b.book_id
-	join user u
-		on bb.userId_fk = u.user_id;
-
-SELECT * FROM book WHERE book_name REGEXP 's' or book_code REGEXP 's';
-
--- SELECT @bookId := 1;
-SELECT @bookId := book_id FROM book WHERE book_code=1347;
-INSERT INTO borrowBook(bookId_fk, userId_fk)
-VALUES (@bookId,1);
-UPDATE borrowBook SET is_return = TRUE WHERE borrowBook_id = @bookId AND userId = 1;
 
